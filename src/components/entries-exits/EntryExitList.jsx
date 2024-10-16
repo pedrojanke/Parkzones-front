@@ -9,6 +9,8 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
     try {
       const response = await axios.get(`${API_URL}/${licensePlate}`);
       console.log('Dados do pagamento:', response.data);
+      // Atualiza a página após o pagamento
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao realizar o pagamento:', error);
     }
