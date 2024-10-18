@@ -22,11 +22,11 @@ const EntryExitForm = ({ onSubmit, buttonText }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit({ vehicle: { id_vehicle: vehicleId } });
-    setVehicleId(''); // Reseta a seleção após o envio
+    setVehicleId('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6">
+    <form onSubmit={handleSubmit} className="p-4 border rounded shadow-lg">
       <div className="mb-4">
         <label className="block text-gray-700">Veículo:</label>
         <input

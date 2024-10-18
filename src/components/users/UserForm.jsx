@@ -1,4 +1,3 @@
-// src/components/UserForm.jsx
 import React, { useEffect, useState } from 'react';
 
 const UserForm = ({ onSubmit, initialData, buttonText }) => {
@@ -11,14 +10,13 @@ const UserForm = ({ onSubmit, initialData, buttonText }) => {
     if (initialData) {
       setName(initialData.name);
       setEmail(initialData.email);
-      setUser_type(initialData.user_type || 'funcionario'); // Fallback para 'funcionario'
+      setUser_type(initialData.user_type || 'funcionario');
     }
   }, [initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validação
     if (!user_type) {
       alert('Por favor, selecione um tipo de usuário.');
       return;
@@ -69,7 +67,7 @@ const UserForm = ({ onSubmit, initialData, buttonText }) => {
         <select
           value={user_type}
           onChange={(e) => setUser_type(e.target.value)}
-          required // Adicione required aqui
+          required
           className="w-full border rounded p-2"
         >
           <option value="funcionario">Funcionário</option>

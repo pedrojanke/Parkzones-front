@@ -6,12 +6,12 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
   const [licensePlate, setLicensePlate] = useState('');
   const [model, setModel] = useState('');
   const [color, setColor] = useState('');
-  const [rateId, setRateId] = useState(''); // Alterado para rateId
-  const [rates, setRates] = useState([]); // Estado para armazenar as taxas
+  const [rateId, setRateId] = useState('');
+  const [rates, setRates] = useState([]);
 
   useEffect(() => {
     const fetchRates = async () => {
-      const ratesData = await getRates(); // Buscando as taxas da API
+      const ratesData = await getRates();
       setRates(ratesData);
     };
     fetchRates();
@@ -22,7 +22,7 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
       setLicensePlate(vehicleToEdit.license_plate);
       setModel(vehicleToEdit.model);
       setColor(vehicleToEdit.color);
-      setRateId(vehicleToEdit.rate?.rate_id || ''); // Usando rate_id
+      setRateId(vehicleToEdit.rate?.rate_id || '');
     }
   }, [vehicleToEdit]);
 
@@ -32,7 +32,7 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
       license_plate: licensePlate, 
       model, 
       color, 
-      rate_id: rateId // Enviando rate_id ao invés de rate
+      rate_id: rateId
     };
 
     try {
@@ -44,18 +44,17 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
         onVehicleAdded(addedVehicle);
       }
 
-      // Resetando os campos após o envio
       setLicensePlate('');
       setModel('');
       setColor('');
-      setRateId(''); // Resetando rateId
+      setRateId('');
     } catch (error) {
       console.error('Erro ao enviar dados do veículo:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4 p-4 bg-gray-100 rounded shadow-md">
+    <form onSubmit={handleSubmit} className="p-4 border rounded shadow-lg">
       <h2 className="text-lg font-bold mb-2">{vehicleToEdit ? 'Editar Veículo' : 'Adicionar Veículo'}</h2>
       <input
         type="text"
@@ -87,7 +86,7 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
         className="border p-2 mb-2 w-full"
         required
       >
-        <option value="" disabled>Select Taxa</option>
+        <option value="" disabled>Selecione a Taxa</option>
         {rates.map((rate) => (
           <option key={rate.rate_id} value={rate.rate_id}>
             {rate.vehicle_type} - R$ {rate.hourly_rate} / hora

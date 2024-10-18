@@ -1,8 +1,7 @@
-// src/pages/Users.jsx
 import React, { useEffect, useState } from 'react';
 import { createUser, deleteUser, getUsers, updateUser } from '../api/usersService';
-import UserForm from '../components/users/UserForm'; // Atualizado
-import UserList from '../components/users/UserList'; // Atualizado
+import UserForm from '../components/users/UserForm';
+import UserList from '../components/users/UserList';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -39,6 +38,7 @@ const Users = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">Gerenciamento de Usuários</h1>
       <UserForm
         onSubmit={selectedUser ? handleUpdateUser : handleCreateUser}
         initialData={selectedUser}

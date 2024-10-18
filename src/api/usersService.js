@@ -21,3 +21,9 @@ export const updateUser = async (id, userData) => {
 export const deleteUser = async (id) => {
   await axios.delete(`${API_URL}/${id}`);
 };
+
+export const loginUser = async (credentials) => {
+  const response = await axios.post(`${API_URL}`, { ...credentials, isLogin: true }); // Envia isLogin
+  return response.data;
+};
+
