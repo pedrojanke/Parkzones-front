@@ -9,10 +9,10 @@ const LoginPage = ({ onLogin }) => {
 
   const handleLogin = async (credentials) => {
     try {
-      const data = await loginUser({ ...credentials, isLogin: true }); // Adiciona isLogin
+      const data = await loginUser(credentials);
       console.log('Login bem-sucedido:', data);
-      onLogin(); // Chama a função de callback para indicar que o usuário está logado
-      navigate('/users'); // Redireciona para a página de gerenciamento
+      onLogin(data.user_type);
+      navigate('/home');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       setErrorMessage('Credenciais inválidas. Tente novamente.');
