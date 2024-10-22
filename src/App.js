@@ -8,11 +8,30 @@ import VehiclesPage from './pages/VehiclesPage';
 import './styles/App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userType, setUserType] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Recupera o estado de autenticação do localStorage
+    return localStorage.getItem('isAuthenticated') === 'true';
+  });
+  
+  const [userType, setUserType] = useState(() => {
+    // Recupera o tipo de usuário do localStorage
+    return localStorage.getItem('userType') || '';
+  });
+
   const handleLogin = (type) => {
     setIsAuthenticated(true);
     setUserType(type);
+    // Armazena o estado no localStorage
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userType', type);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUserType('');
+    // Remove o estado do localStorage
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userType');
   };
 
   return (
