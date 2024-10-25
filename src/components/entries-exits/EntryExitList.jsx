@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useState } from 'react';
 
 const API_URL = 'http://localhost:3000/entries-exits/active';
 const API_QR_URL = 'http://localhost:3000/entries-exits'; // URL para buscar o QR code
 
 const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
+  const [sortColumn, setSortColumn] = useState('entry_time'); // Coluna a ser ordenada
+  const [sortDirection, setSortDirection] = useState('asc'); // Estado para armazenar a direção de ordenação
+
   const handlePayment = async (licensePlate, idMovement) => {
     try {
       // Primeiro, busca os dados para o pagamento
@@ -44,22 +47,105 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
     return format(date, 'dd/MM/yyyy HH:mm:ss');
   };
 
+  // Função para alternar a direção de ordenação
+  const toggleSortDirection = (column) => {
+    setSortColumn(column);
+    setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
+  };
+
+  // Função para ordenar as entradas e saídas
+  const sortedEntriesExits = [...entriesExits].sort((a, b) => {
+    let valueA, valueB;
+
+    switch (sortColumn) {
+      case 'license_plate':
+        valueA = a.vehicle.license_plate;
+        valueB = b.vehicle.license_plate;
+        break;
+      case 'vehicle_type':
+        valueA = a.vehicle.type;
+        valueB = b.vehicle.type;
+        break;
+      case 'entry_time':
+        valueA = new Date(a.entry_time);
+        valueB = new Date(b.entry_time);
+        break;
+      case 'exit_time':
+        valueA = a.exit_time ? new Date(a.exit_time) : null;
+        valueB = b.exit_time ? new Date(b.exit_time) : null;
+        break;
+      case 'duration_minutes':
+        valueA = a.duration_minutes;
+        valueB = b.duration_minutes;
+        break;
+      case 'charged_amount':
+        valueA = a.charged_amount;
+        valueB = b.charged_amount;
+        break;
+      case 'is_active':
+        valueA = a.is_active;
+        valueB = b.is_active;
+        break;
+      default:
+        valueA = new Date(a.entry_time);
+        valueB = new Date(b.entry_time);
+    }
+
+    // Ordenar com base na direção de ordenação
+    return sortDirection === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
+  });
+
   return (
     <table className="w-full border-collapse">
       <thead>
         <tr>
-          <th className="border p-2">Placa do Veículo</th>
-          <th className="border p-2">Tipo de Veículo</th>
-          <th className="border p-2">Data/Hora de Entrada</th>
-          <th className="border p-2">Data/Hora de Saída</th>
-          <th className="border p-2">Duração (minutos)</th>
-          <th className="border p-2">Valor Cobrado</th>
-          <th className="border p-2">Ativo</th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('license_plate')}
+          >
+            Placa do Veículo {sortColumn === 'license_plate' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('vehicle_type')}
+          >
+            Tipo de Veículo {sortColumn === 'vehicle_type' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('entry_time')}
+          >
+            Data/Hora de Entrada {sortColumn === 'entry_time' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('exit_time')}
+          >
+            Data/Hora de Saída {sortColumn === 'exit_time' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('duration_minutes')}
+          >
+            Duração (minutos) {sortColumn === 'duration_minutes' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('charged_amount')}
+          >
+            Valor Cobrado {sortColumn === 'charged_amount' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
+          <th 
+            className="border p-2 cursor-pointer" 
+            onClick={() => toggleSortDirection('is_active')}
+          >
+            Ativo {sortColumn === 'is_active' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+          </th>
           <th className="border p-2">Ações</th>
         </tr>
       </thead>
       <tbody>
-        {entriesExits.map((entryExit) => (
+        {sortedEntriesExits.map((entryExit) => (
           <tr key={entryExit.id_movement}>
             <td className="border p-2">{entryExit.vehicle.license_plate}</td>
             <td className="border p-2">{entryExit.vehicle.type}</td>

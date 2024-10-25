@@ -20,3 +20,8 @@ export const updateEntryExit = async (id, entryExitData) => {
 export const deleteEntryExit = async (id) => {
   await axios.delete(`${API_URL}/${id}`);
 };
+
+export const getActiveEntryByPlate = async (licensePlate) => {
+  const response = await axios.get(`${API_URL}/activeEntry/${licensePlate}`);
+  return response.data ? response.data : null;
+};

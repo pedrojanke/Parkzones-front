@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { getActiveEntryByPlate } from '../../api/entriesExitService';
 import { getVehicles } from '../../api/vehiclesService';
 
 const EntryExitForm = ({ onSubmit, buttonText }) => {
   const [vehicleId, setVehicleId] = useState('');
   const [vehicles, setVehicles] = useState([]);
   const [search, setSearch] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -17,12 +19,25 @@ const EntryExitForm = ({ onSubmit, buttonText }) => {
 
   const handleVehicleChange = (e) => {
     setVehicleId(e.target.value);
+    setErrorMessage('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ vehicle: { id_vehicle: vehicleId } });
-    setVehicleId('');
+
+    const selectedVehicle = vehicles.find(vehicle => vehicle.id_vehicle === vehicleId);
+
+    if (selectedVehicle) {
+      const activeEntry = await getActiveEntryByPlate(selectedVehicle.license_plate);
+
+      if (activeEntry) {
+        setErrorMessage('Já existe um veículo com a mesma placa no estacionamento!');
+      } else {
+        onSubmit({ vehicle: { id_vehicle: vehicleId } });
+        setVehicleId('');
+        setErrorMessage('');
+      }
+    }
   };
 
   return (
@@ -53,6 +68,7 @@ const EntryExitForm = ({ onSubmit, buttonText }) => {
               </option>
             ))}
         </select>
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
       </div>
       <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
         {buttonText}

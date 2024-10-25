@@ -9,19 +9,16 @@ import './styles/App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Recupera o estado de autenticação do localStorage
     return localStorage.getItem('isAuthenticated') === 'true';
   });
   
   const [userType, setUserType] = useState(() => {
-    // Recupera o tipo de usuário do localStorage
     return localStorage.getItem('userType') || '';
   });
 
   const handleLogin = (type) => {
     setIsAuthenticated(true);
     setUserType(type);
-    // Armazena o estado no localStorage
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('userType', type);
   };
@@ -29,7 +26,6 @@ function App() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setUserType('');
-    // Remove o estado do localStorage
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('userType');
   };
@@ -37,8 +33,16 @@ function App() {
   return (
     <Router>
       <div className="App bg-gray-100 min-h-screen">
-        <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow-lg">
-          <h1 className="text-4xl text-center font-bold tracking-wide">Sistema de Gerenciamento</h1>
+        <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow-lg flex justify-between items-center">
+          <h1 className="text-4xl font-bold tracking-wide">Sistema de Gerenciamento</h1>
+          {isAuthenticated && (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 rounded-full shadow-lg hover:bg-red-600 transition-transform transform hover:scale-105"
+            >
+              Logout
+            </button>
+          )}
         </header>
 
         {isAuthenticated ? (
