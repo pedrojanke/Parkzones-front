@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { getRates } from '../../api/ratesService';
 import { createVehicle, updateVehicle } from '../../api/vehiclesService';
@@ -8,6 +10,7 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
   const [color, setColor] = useState('');
   const [rateId, setRateId] = useState('');
   const [rates, setRates] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchRates = async () => {
@@ -36,6 +39,8 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
     };
 
     try {
+      setError('');
+
       if (vehicleToEdit) {
         const updatedVehicle = await updateVehicle(vehicleToEdit.id_vehicle, vehicleData);
         onEditComplete(updatedVehicle);
@@ -49,6 +54,11 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
       setColor('');
       setRateId('');
     } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setError('A placa informada já está cadastrada no sistema.');
+      } else {
+        setError('Erro ao enviar dados do veículo.');
+      }
       console.error('Erro ao enviar dados do veículo:', error);
     }
   };
@@ -93,6 +103,9 @@ const VehicleForm = ({ onVehicleAdded, vehicleToEdit, onEditComplete }) => {
           </option>
         ))}
       </select>
+
+      {error && <div className="text-red-500 mb-2">{error}</div>}
+      
       <button type="submit" className="bg-blue-500 text-white p-2 rounded">
         {vehicleToEdit ? 'Atualizar Veículo' : 'Adicionar Veículo'}
       </button>

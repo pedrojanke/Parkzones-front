@@ -8,7 +8,16 @@ export const getEntriesExits = async () => {
 };
 
 export const createEntryExit = async (entryExitData) => {
-  const response = await axios.post(API_URL, entryExitData);
+  console.log({entryExitData});
+
+  const data = { 
+    vehicle_id: entryExitData.vehicle.id_vehicle,
+  }
+  
+  const response = await axios.post(API_URL, data);
+
+  console.log({response});
+  
   return response.data;
 };
 

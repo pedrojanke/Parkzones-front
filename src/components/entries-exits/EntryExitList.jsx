@@ -3,23 +3,21 @@ import { format } from 'date-fns';
 import React, { useState } from 'react';
 
 const API_URL = 'http://localhost:3000/entries-exits/active';
-const API_QR_URL = 'http://localhost:3000/entries-exits'; // URL para buscar o QR code
+const API_QR_URL = 'http://localhost:3000/entries-exits';
 
+// eslint-disable-next-line react/prop-types
 const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
-  const [sortColumn, setSortColumn] = useState('entry_time'); // Coluna a ser ordenada
-  const [sortDirection, setSortDirection] = useState('asc'); // Estado para armazenar a direção de ordenação
+  const [sortColumn, setSortColumn] = useState('entry_time');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const handlePayment = async (licensePlate, idMovement) => {
     try {
-      // Primeiro, busca os dados para o pagamento
       const response = await axios.get(`${API_URL}/${licensePlate}`);
       console.log('Dados do pagamento:', response.data);
-      
-      // Atualiza o is_active para false usando PUT
+
       const updateResponse = await axios.put(`${API_QR_URL}/${idMovement}`, { is_active: false });
       console.log('Resposta da atualização:', updateResponse.data);
 
-      // Atualiza a página após o pagamento
       window.location.reload();
     } catch (error) {
       console.error('Erro ao realizar o pagamento:', error.response ? error.response.data : error.message);
@@ -29,9 +27,8 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
   const handleQRCode = async (id_movement) => {
     try {
       const response = await axios.get(`${API_QR_URL}/${id_movement}`);
-      const qrCodeUrl = response.data.qr_code; // Supondo que o QR code venha no campo 'qr_code'
+      const qrCodeUrl = response.data.qr_code;
 
-      // Abre o valor do QR code como imagem em uma nova aba
       if (qrCodeUrl) {
         const newWindow = window.open();
         newWindow.document.write(`<img src="${qrCodeUrl}" alt="QR Code" />`);
@@ -47,13 +44,11 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
     return format(date, 'dd/MM/yyyy HH:mm:ss');
   };
 
-  // Função para alternar a direção de ordenação
   const toggleSortDirection = (column) => {
     setSortColumn(column);
     setSortDirection((prevDirection) => (prevDirection === 'asc' ? 'desc' : 'asc'));
   };
 
-  // Função para ordenar as entradas e saídas
   const sortedEntriesExits = [...entriesExits].sort((a, b) => {
     let valueA, valueB;
 
@@ -63,8 +58,8 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
         valueB = b.vehicle.license_plate;
         break;
       case 'vehicle_type':
-        valueA = a.vehicle.type;
-        valueB = b.vehicle.type;
+        valueA = a.vehicle.vehicle_type;
+        valueB = b.vehicle.vehicle_type;
         break;
       case 'entry_time':
         valueA = new Date(a.entry_time);
@@ -91,7 +86,6 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
         valueB = new Date(b.entry_time);
     }
 
-    // Ordenar com base na direção de ordenação
     return sortDirection === 'asc' ? (valueA > valueB ? 1 : -1) : (valueA < valueB ? 1 : -1);
   });
 
@@ -148,7 +142,7 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
         {sortedEntriesExits.map((entryExit) => (
           <tr key={entryExit.id_movement}>
             <td className="border p-2">{entryExit.vehicle.license_plate}</td>
-            <td className="border p-2">{entryExit.vehicle.type}</td>
+            <td className="border p-2">{entryExit.vehicle.vehicle_type || 'na'}</td>
             <td className="border p-2">{formatDate(entryExit.entry_time)}</td>
             <td className="border p-2">{entryExit.exit_time ? formatDate(entryExit.exit_time) : 'N/A'}</td>
             <td className="border p-2">{entryExit.duration_minutes || 'N/A'}</td>

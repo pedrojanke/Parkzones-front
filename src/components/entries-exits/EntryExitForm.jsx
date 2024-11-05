@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getActiveEntryByPlate } from '../../api/entriesExitService';
 import { getVehicles } from '../../api/vehiclesService';
 
+// eslint-disable-next-line react/prop-types
 const EntryExitForm = ({ onSubmit, buttonText }) => {
   const [vehicleId, setVehicleId] = useState('');
   const [vehicles, setVehicles] = useState([]);
@@ -26,6 +27,8 @@ const EntryExitForm = ({ onSubmit, buttonText }) => {
     e.preventDefault();
 
     const selectedVehicle = vehicles.find(vehicle => vehicle.id_vehicle === vehicleId);
+
+    console.log(selectedVehicle);
 
     if (selectedVehicle) {
       const activeEntry = await getActiveEntryByPlate(selectedVehicle.license_plate);

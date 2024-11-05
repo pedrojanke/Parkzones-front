@@ -1,9 +1,13 @@
+/* eslint-disable no-undef */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
+import { createRate, updateRate } from '../../api/ratesService';
 
-const RateForm = ({ onSubmit, initialData, buttonText }) => {
+const RateForm = ({ onRateAdded, initialData, buttonText, rateToEdit, onEditComplete}) => {
   const [hourlyRate, setHourlyRate] = useState('');
   const [vehicleType, setVehicleType] = useState('');
   const [isActive, setIsActive] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (initialData) {
@@ -13,12 +17,36 @@ const RateForm = ({ onSubmit, initialData, buttonText }) => {
     }
   }, [initialData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({ hourly_rate: hourlyRate, vehicle_type: vehicleType, is_active: isActive });
-    setHourlyRate('');
-    setVehicleType('');
-    setIsActive(true);
+    const rateData = {
+      hourly_rate: hourlyRate,
+      vehicle_type: vehicleType,
+      is_active: isActive
+    };
+
+    try {
+      setError('');
+
+      if (rateToEdit) {
+        const updatedRate = await updateRate(rateToEdit.id_rate, rateData);
+        onEditComplete(updatedRate);
+      } else {
+        const addedRate = await createRate(rateData);
+        onRateAdded(addedRate);
+      }
+
+      setHourlyRate('');
+      setVehicleType('');
+      setIsActive(true);
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setError('Tipo de veículo já cadastrado.');
+      } else {
+        setError('Erro ao enviar dados do tarifa.');
+      }
+      console.error('Erro ao enviar dados do tarifa:', error);
+    }
   };
 
   return (
@@ -47,6 +75,8 @@ const RateForm = ({ onSubmit, initialData, buttonText }) => {
           className="w-full border rounded p-2"
         />
       </div>
+
+      {error && <div className="text-red-500 mb-2">{error}</div>}
 
       <button type="submit" className="bg-blue-500 text-white p-2 rounded">
         {buttonText}
