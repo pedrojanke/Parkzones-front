@@ -25,6 +25,7 @@ jobs:
         run: |
           npm install
           npm install cypress
+          npm install wait-on
 
       - name: Start server
         run: npm run start & # Rodar o servidor em segundo plano
