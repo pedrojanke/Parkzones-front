@@ -58,8 +58,8 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
         valueB = b.vehicle.license_plate;
         break;
       case 'vehicle_type':
-        valueA = a.vehicle.vehicle_type;
-        valueB = b.vehicle.vehicle_type;
+        valueA = a.vehicle.rate.vehicle_type;
+        valueB = b.vehicle.rate.vehicle_type;
         break;
       case 'entry_time':
         valueA = new Date(a.entry_time);
@@ -142,7 +142,7 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
         {sortedEntriesExits.map((entryExit) => (
           <tr key={entryExit.id_movement}>
             <td className="border p-2">{entryExit.vehicle.license_plate}</td>
-            <td className="border p-2">{entryExit.vehicle.vehicle_type || 'na'}</td>
+            <td className="border p-2">{entryExit.vehicle.rate.vehicle_type}</td>
             <td className="border p-2">{formatDate(entryExit.entry_time)}</td>
             <td className="border p-2">{entryExit.exit_time ? formatDate(entryExit.exit_time) : 'N/A'}</td>
             <td className="border p-2">{entryExit.duration_minutes || 'N/A'}</td>
