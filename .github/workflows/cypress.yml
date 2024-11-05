@@ -26,10 +26,11 @@ jobs:
           npm install
           npm install cypress
 
-          - name: Start server
-        
-run: npm run start & # Rodar o servidor em segundo plano
+      - name: Start server
+        run: npm run start & # Rodar o servidor em segundo plano
 
+      - name: Wait for the server to be ready
+        run: npx wait-on http://localhost:3001
 
       - name: Run Cypress tests
         run: npx cypress run
