@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/usersService';
 import LoginForm from '../components/login/LoginForm';
 
+// eslint-disable-next-line react/prop-types
 const LoginPage = ({ onLogin }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('token');
+
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [navigate]);
 
   const handleLogin = async (credentials) => {
     try {
       const data = await loginUser(credentials);
       console.log('Login bem-sucedido:', data);
       onLogin(data.user_type);
+      
+      localStorage.setItem('token', data.token);
       navigate('/home');
     } catch (error) {
       console.error('Erro ao fazer login:', error);

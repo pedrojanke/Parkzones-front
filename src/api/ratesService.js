@@ -13,7 +13,7 @@ export const createRate = async (rateData) => {
 };
 
 export const updateRate = async (id, rateData) => {
-  const response = await axios.put(`${API_URL}/${id}`, rateData);
+  const response = await axios.patch(`${API_URL}/${id}`, rateData);
   return response.data;
 };
 

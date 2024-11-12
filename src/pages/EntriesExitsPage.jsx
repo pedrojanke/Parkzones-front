@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { createEntryExit, deleteEntryExit, getEntriesExits, updateEntryExit } from '../api/entriesExitService';
 import EntryExitForm from '../components/entries-exits/EntryExitForm';
 import EntryExitList from '../components/entries-exits/EntryExitList';
@@ -34,6 +35,9 @@ const EntriesExitsPage = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Link to="/home" className="text-blue-500 hover:text-blue-700 font-semibold">
+        ← Voltar
+      </Link>
       <h1 className="text-3xl font-bold mb-6">Gerenciamento de Entradas e Saídas</h1>
 
       <EntryExitForm

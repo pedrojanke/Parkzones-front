@@ -13,7 +13,7 @@ export const createVehicle = async (vehicleData) => {
 };
 
 export const updateVehicle = async (id, vehicleData) => {
-  const response = await axios.put(`${API_URL}/${id}`, vehicleData);
+  const response = await axios.patch(`${API_URL}/${id}`, vehicleData);
   return response.data;
 };
 

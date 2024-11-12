@@ -28,7 +28,7 @@ jobs:
           npm install wait-on
 
       - name: Start server
-        run: npm run start & # Rodar o servidor em segundo plano
+        run: npm run start &
 
       - name: Wait for the server to be ready
         run: npx wait-on http://localhost:3001

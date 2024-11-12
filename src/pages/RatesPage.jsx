@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { createRate, deleteRate, getRates, updateRate } from '../api/ratesService';
-import RateForm from '../components/rates/RateForm';
-import RateList from '../components/rates/RateList';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  createRate,
+  deleteRate,
+  getRates,
+  updateRate,
+} from "../api/ratesService";
+import RateForm from "../components/rates/RateForm";
+import RateList from "../components/rates/RateList";
 
 const RatesPage = () => {
   const [rates, setRates] = useState([]);
@@ -34,16 +40,30 @@ const RatesPage = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Link
+        to="/home"
+        className="text-blue-500 hover:text-blue-700 font-semibold"
+      >
+        ← Voltar
+      </Link>
       <h1 className="text-3xl font-bold mb-6">Gerenciamento de Tarifas</h1>
 
       <RateForm
-        onSubmit={editingRate ? (data) => handleUpdateRate(editingRate.rate_id, data) : handleCreateRate}
+        onSubmitRate={
+          editingRate
+            ? (data) => handleUpdateRate(editingRate.rate_id, data)
+            : handleCreateRate
+        }
         initialData={editingRate}
-        buttonText={editingRate ? 'Atualizar Tarifa' : 'Criar Tarifa'}
+        buttonText={editingRate ? "Atualizar Tarifa" : "Criar Tarifa"}
       />
 
       <h2 className="text-2xl font-bold mt-6 mb-4">Tarifas já existentes</h2>
-      <RateList rates={rates} onEdit={setEditingRate} onDelete={handleDeleteRate} />
+      <RateList
+        rates={rates}
+        onEdit={setEditingRate}
+        onDelete={handleDeleteRate}
+      />
     </div>
   );
 };
