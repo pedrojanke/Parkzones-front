@@ -7,9 +7,8 @@ const PaymentsPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [paymentData, setPaymentData] = useState(null);
   
-  const location = useLocation(); // Para obter a localização atual
+  const location = useLocation();
 
-  // Função para obter a placa da URL e buscar os dados do veículo
   const fetchPaymentData = async (plate) => {
     setErrorMessage('');
     try {
@@ -24,15 +23,15 @@ const PaymentsPage = () => {
     }
   };
 
-  // useEffect para extrair a placa da URL e buscar os dados ao montar o componente
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const plate = queryParams.get('license_plate');
     if (plate) {
-      setLicensePlate(plate); // Opcional: para exibir a placa no campo de entrada
+      setLicensePlate(plate);
       fetchPaymentData(plate);
     }
   }, [location]);
+  
 
   const handlePayment = async (e) => {
     e.preventDefault();
