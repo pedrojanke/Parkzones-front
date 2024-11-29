@@ -5,8 +5,8 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:3000/entries-exits/active";
-const API_QR_URL = "http://localhost:3000/entries-exits";
+const API_URL = "https://parkzones-63e7e41af69c.herokuapp.com/entries-exits/active";
+const API_QR_URL = "https://parkzones-63e7e41af69c.herokuapp.com/entries-exits";
 
 const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
   const [sortColumn, setSortColumn] = useState("entry_time");

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://parkzones-63e7e41af69c.herokuapp.com',
   headers: {
     'Content-Type': 'application/json',
   },

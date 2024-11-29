@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/entries-exits';
+const API_URL = 'https://parkzones-63e7e41af69c.herokuapp.com/entries-exits';
 
 export const getEntriesExits = async () => {
   const response = await axios.get(API_URL);

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line no-unused-vars
 function handleQrCodeScan(vehicle) {
   const navigate = useNavigate();
-  const qrCodeUrl = `http://localhost:3000/entries-exits/active/${vehicle.license_plate}`;
+  const qrCodeUrl = `https://parkzones-63e7e41af69c.herokuapp.com/entries-exits/active/${vehicle.license_plate}`;
 
   axios.get(qrCodeUrl)
     .then((response) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/rates';
+const API_URL = 'https://parkzones-63e7e41af69c.herokuapp.com/rates';
 
 export const getRates = async () => {
   const response = await axios.get(API_URL);

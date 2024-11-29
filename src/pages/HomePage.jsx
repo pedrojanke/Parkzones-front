@@ -10,8 +10,8 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 function HomePage({ userType }) {
   const [activeEntries, setActiveEntries] = useState(0);
   const [totalVehicles, setTotalVehicles] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0); // Garantir que comece como um número
-  const [totalDuration, setTotalDuration] = useState(0); // Novo estado para armazenar o tempo total
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
   const [topModels, setTopModels] = useState({
     labels: [],
     datasets: [{
@@ -19,25 +19,21 @@ function HomePage({ userType }) {
       data: [],
       backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
     }]
-  }); // Novo estado para armazenar os 3 modelos mais frequentes
+  });
 
-  // Fetch data for dashboard
   useEffect(() => {
-    // Fetch active entries
     axios
-      .get('http://localhost:3000/entries-exits')
+      .get('https://parkzones-63e7e41af69c.herokuapp.com/entries-exits')
       .then((response) => {
         const activeEntriesCount = response.data.filter((entry) => entry.is_active === true).length;
         setActiveEntries(activeEntriesCount);
         
-        // Fetch total revenue for entries with is_active = false
         const totalRevenue = response.data
           .filter((entry) => entry.is_active === false)
-          .reduce((sum, entry) => sum + (parseFloat(entry.charged_amount) || 0), 0); // Garantir que charged_amount seja numérico
+          .reduce((sum, entry) => sum + (parseFloat(entry.charged_amount) || 0), 0);
 
         setTotalRevenue(totalRevenue);
 
-        // Calculate total duration in minutes for entries with is_active = false
         const totalMinutes = response.data
           .filter((entry) => entry.is_active === false)
           .reduce((sum, entry) => sum + (entry.duration_minutes || 0), 0);
@@ -48,9 +44,9 @@ function HomePage({ userType }) {
       .catch((error) => console.error('Erro ao buscar entradas ativas:', error));
 
     axios
-      .get('http://localhost:3000/vehicles')
+      .get('https://parkzones-63e7e41af69c.herokuapp.com/vehicles')
       .then((response) => {
-        console.log(response.data); // Verificar se os dados estão chegando corretamente
+        console.log(response.data);
         setTotalVehicles(response.data.length);
     
         const modelCount = response.data.reduce((acc, vehicle) => {
@@ -65,7 +61,7 @@ function HomePage({ userType }) {
         const labels = sortedModels.map((model) => model[0]);
         const data = sortedModels.map((model) => model[1]);
     
-        console.log(labels, data); // Verificar os labels e os dados
+        console.log(labels, data);
     
         setTopModels({
           labels: labels,
