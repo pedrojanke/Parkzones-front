@@ -1,9 +1,6 @@
-const { defineConfig } = require("cypress");
-
-module.exports = defineConfig({
+module.exports = {
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    baseUrl: 'https://parkzones-front-fc2e998adaa1.herokuapp.com' ,
+    defaultCommandTimeout: 10000,
   },
-});
+};

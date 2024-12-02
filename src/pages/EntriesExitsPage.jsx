@@ -7,6 +7,7 @@ import EntryExitList from '../components/entries-exits/EntryExitList';
 const EntriesExitsPage = () => {
   const [entriesExits, setEntriesExits] = useState([]);
   const [editingEntryExit, setEditingEntryExit] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Adicionado para o campo de busca
 
   const fetchEntriesExits = async () => {
     const data = await getEntriesExits();
@@ -33,6 +34,17 @@ const EntriesExitsPage = () => {
     fetchEntriesExits();
   }, []);
 
+  const filteredEntriesExits = entriesExits.filter((entryExit) => {
+    const { license_plate, model, color } = entryExit.vehicle;
+    const lowerSearch = searchTerm.toLowerCase();
+
+    return (
+      license_plate.toLowerCase().includes(lowerSearch) ||
+      model.toLowerCase().includes(lowerSearch) ||
+      color.toLowerCase().includes(lowerSearch)
+    );
+  });
+
   return (
     <div className="container mx-auto p-4">
       <Link to="/home" className="text-blue-500 hover:text-blue-700 font-semibold">
@@ -47,7 +59,20 @@ const EntriesExitsPage = () => {
       />
 
       <h2 className="text-2xl font-bold mt-6 mb-4">Movimentos já registrados</h2>
-      <EntryExitList entriesExits={entriesExits} onEdit={setEditingEntryExit} onDelete={handleDeleteEntryExit} />
+
+      <input
+        type="text"
+        placeholder="Buscar por placa..."
+        className="mb-4 p-2 border rounded w-full"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <EntryExitList
+        entriesExits={filteredEntriesExits}
+        onEdit={setEditingEntryExit}
+        onDelete={handleDeleteEntryExit}
+      />
     </div>
   );
 };
