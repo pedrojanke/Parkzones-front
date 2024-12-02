@@ -116,7 +116,6 @@ const UserForm = ({ onSubmit, initialData, buttonText }) => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
           className="w-full border rounded p-2"
         />
         {errors.password && (
