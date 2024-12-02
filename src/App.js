@@ -41,7 +41,7 @@ function App() {
   return (
     <div className="App bg-gray-100 min-h-screen">
       <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 shadow-lg flex justify-between items-center">
-        <h1 className="text-4xl font-bold tracking-wide">Sistema de Gerenciamento</h1>
+        <h1 className="text-4xl font-bold tracking-wide">Parkzones - Gerenciamento de Estacionamento</h1>
         {isAuthenticated && (
           <button
             onClick={handleLogout}
