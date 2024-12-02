@@ -244,7 +244,7 @@ const EntryExitList = ({ entriesExits, onEdit, onDelete }) => {
               </button>
               <button
                 onClick={() =>
-                  (window.location.href = `http://localhost:3001/payments?license_plate=${entryExit.vehicle.license_plate}`)
+                  (window.location.href = `https://parkzones-front-fc2e998adaa1.herokuapp.com/payments?license_plate=${entryExit.vehicle.license_plate}`)
                 }
                 className="bg-purple-500 text-white p-2 rounded"
               >
